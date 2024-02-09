@@ -1,12 +1,13 @@
 import { NewCardsFragment } from "./NewCardsFragment"
+import Styles from "./NewCardsList.module.css"
 
 export const NewCardsList = () => {
     return (
-      <section class="list-section">
-      <h2 class="list-section__title" id="new">
+      <section className={Styles["list-section"]}>
+      <h2 className={Styles["list-section__title"]} id="new">
         Новинки
       </h2>
-      <ul class="cards-list">
+      <ul className={Styles["cards-list"]}>
       <NewCardsFragment />
       </ul>
     </section>

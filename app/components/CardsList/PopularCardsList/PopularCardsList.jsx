@@ -1,12 +1,13 @@
 import { PopularCardsFragment } from "./PopularCardsFragment" 
+import Styles from "./PopularCardsList.module.css"
 
 export const PopularCardsList = () => {
     return (
-<section class="list-section">
-        <h2 class="list-section__title" id="popular">
+    <section className={Styles["list-section"]}>
+        <h2 className={Styles["list-section__title"]} id="popular">
           Популярное
         </h2>
-        <ul class="cards-list">
+        <ul className={Styles["cards-list"]}>
           <PopularCardsFragment />
         </ul>
       </section>

@@ -1,3 +1,6 @@
+'use client';
+import {useState} from 'react';
+
 import Styles from './Header.module.css'
 
 export const Header = () => {

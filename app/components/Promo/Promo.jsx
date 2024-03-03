@@ -6,7 +6,7 @@ export const Promo = () => {
   const [codeIsVisible, setCodeIsVisible] = useState(false)
 
   const handleButtonClick = () => {
-    setCodeIsVisible(!codeIsVisible)
+    !codeIsVisible && setCodeIsVisible(true)
   }
 
   useEffect(() => {

@@ -24,10 +24,10 @@ export const Header = (props) => {
 
   return (
     <header className={Styles['header']}>
-      <Link href="./index.html" className={Styles['logo']}>
+      <Link href="/" className={Styles['logo']}>
         <img
           className={Styles['logo__image']}
-          src="./images/logo.svg"
+          src="/images/logo.svg"
           alt="Логотип Pindie"
         />
       </Link>
@@ -44,7 +44,7 @@ export const Header = (props) => {
             </Link>
           </li>
           <li className={Styles['menu__item']}>
-            <Link href="\shooters" className={`${Styles["menu__link"]} ${pathname === "/shooters" ? Styles["menu__link_active"] : ""}`}>
+            <Link href="/shooters" className={`${Styles["menu__link"]} ${pathname === "/shooters" ? Styles["menu__link_active"] : ""}`}>
               Шутеры
             </Link>
           </li>

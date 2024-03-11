@@ -11,3 +11,7 @@ export const getGamesByCategory = (category) => {
   export const getGameById = (id) => {
     return data.find((game) => game.id === Number(id));
   }
+
+  export const checkIfUserVoted = (game, userId) => {
+    return game.users.find((user) => user.id === userId);
+  };

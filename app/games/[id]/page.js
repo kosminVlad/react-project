@@ -6,10 +6,16 @@ import { GameNotFound } from "@/app/components/GameNotFound/GameNotFound";
 import { Preloader } from "@/app/components/Preloader/Preloader";
 import { useEffect } from "react";
 import { endpoints } from "@/app/api/config";
+import { getMe, getJWT, removeJWT, checkIfUserVoted } from "@/app/api/api-utils"
 
 export default function GamePage(props) {
   const [game, setGame] = useState(null)
   const [preloaderVisible, setPreloaderVisible] = useState(true)
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
+  const [isVoted, setIsVoted] = useState(false);
+
+
 
   useEffect(() => {
     async function fetchData() {
@@ -19,6 +25,30 @@ export default function GamePage(props) {
     }
     fetchData();
   }, [])
+
+  useEffect(() => {
+    const jwt = getJWT()
+    if (jwt) {
+      getMe(endpoints.me, jwt).then((userData) => {
+        if (isResponseOk(userData)) {
+          setIsAuthorized (true)
+          setCurrentUser(userData)
+        } else {
+          setIsAuthorized (false)
+          removeJWT()
+        }
+      })
+    }
+  })
+
+  
+  useEffect(() => {
+    if (currentUser && game) {
+      setIsVoted(checkIfUserVoted(game, currentUser.id));
+    } else {
+          setIsVoted(false);
+      }
+  }, [currentUser, game]);
 
   return (
     <main className="main">
@@ -48,8 +78,8 @@ export default function GamePage(props) {
                 За игру уже проголосовали:
                 <span className={Styles["about__accent"]}>10</span>
               </p>
-              <button className={`button ${Styles["about__vote-button"]}`}>
-                Голосовать
+              <button disabled={!isAuthorized || isVoted} className={`button ${Styles["about__vote-button"]}`} onClick={handleVote}>
+                {isVoted ? "Голос учтён" : "Голосовать"}
               </button>
             </div>
           </section>

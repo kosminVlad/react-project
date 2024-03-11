@@ -23,25 +23,28 @@ export const Header = (props) => {
   }
 
   const pathname = usePathname();
-  useEffect(() =>{
-    const jwt = setJWT();
-    if (jwt) {
-      getMe(endpoints.me, jwt).then((userData) => {
-        if(isResponseOk(userData)) {
-          setIsAuthorized(true)
-        } else {
-          setIsAuthorized(false)
-          removeJWT()
-        }
-      })
-    }
-  }, [] 
-  )
-
   const handleLogout = () => {
     setIsAuthorized(false)
     removeJWT()
   }
+
+  useEffect(() => {
+  const handleAuthorized = async (jwt) => {
+  const userData = await getMe(endpoints.me, jwt);
+
+  if (isResponseOk(userData)) { 
+    setIsAuthorized(true)
+  } else {
+  setIsAuthorized(false);
+  removeJWT()
+  }
+}
+  
+const jwt = getJWT();
+  if(jwt) {
+  handleAuthorized(jwt);
+  }
+}, [])
 
   return (
     <header className={Styles['header']}>

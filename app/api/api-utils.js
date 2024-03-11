@@ -65,7 +65,6 @@ export const authorize = async (url, data) => {
 
 export const getMe = async (url, jwt) => {
   try {
-   
     const response = await fetch(url, {
       method: "GET",
       headers: { Authorization: `Bearer ${jwt}` },
@@ -91,3 +90,27 @@ export const getJWT = () => {
 export const removeJWT = () => {
   localStorage.removeItem("jwt");
 };
+
+export const checkIfUserVoted = (game, userId) => {
+  return game.users.find((user) => user.id === userId);
+};
+
+export const vote = async (url, jwt, usersArray) => {
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({ users_permissions_users: usersArray }),
+    })
+    if (response.status !== 200) {
+      throw new Error('Ошибка голосования')
+    }
+    const result = await response.json()
+    return result
+  } catch (error) {
+    return error
+  }
+}

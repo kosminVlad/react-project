@@ -5,21 +5,23 @@ import { authorize } from '@/app/api/api-utils';
 import { isResponseOk, getMe } from '@/app/api/api-utils';
 import { endpoints } from '@/app/api/config';
 import { useEffect } from 'react';
-import { setJWT } from '@/app/api/api-utils';
+import { setJWT, removeJWT, getJWT } from '@/app/api/api-utils';
 
 export const AuthForm = (props) => {
   const [authData, setAuthData] = useState({ identifier: "", password: "" });
   const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState({ status: null, text: null });
+
   const handleInput = (e) => {
     setAuthData({ ...authData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
   e.preventDefault();
   const userData = await authorize(endpoints.auth, authData);
   if (isResponseOk(userData)) {
-    await getMe(endpoints.me, userData.jwt);
     setUserData(userData);
+    await getMe(endpoints.me, userData.jwt);
     setJWT(userData.jwt);
     props.setAuth(true);
     setMessage({ status: "success", text: "Вы авторизовались!" });

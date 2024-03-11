@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 
 export const Header = (props) => {
   const [popupIsOpened, setPopupIsOpened] = useState(false)
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const openPopup = () => {
     setPopupIsOpened(true)
@@ -72,7 +73,7 @@ export const Header = (props) => {
       </nav>
       <Overlay isOpened={popupIsOpened} close={closePopup}/>
       <Popup isOpened={popupIsOpened} close={closePopup}>
-          <AuthForm />
+          <AuthForm close={closePopup} setAuth={setIsAuthorized}/>
       </Popup>
 
     </header>

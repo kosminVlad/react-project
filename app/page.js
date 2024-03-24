@@ -1,20 +1,26 @@
-import { getNormalizedGamesDataByCategory } from "./api/api-utils";
+'use client';
+
+import { endpoints } from "./api/config";
 import { Banner } from "./components/Banner/Banner";
 import { CardsList } from "./components/CardsList/CardsList";
 import { Promo } from "./components/Promo/Promo";
-import { endpoints } from "./api/config";
-import { getData } from "./api/api-utils";
+import { useGetDataByCategory } from "./api/api-hooks";
+import { Preloader } from "@/app/components/Preloader/Preloader";
 
-export default async function Home() {
-
-  const popularGames = await getNormalizedGamesDataByCategory(endpoints.games, "popular")
-  const newGames = await getNormalizedGamesDataByCategory(endpoints.games, "new")
-  
+export default function Home() {
+  const popularGames = useGetDataByCategory(endpoints.games, "popular");
+  const newGames = useGetDataByCategory(endpoints.games, "new");
   return (
     <main className="main">
       <Banner />
-      <CardsList id="popular" title="Популярные" data={popularGames} />
-      <CardsList id="new" title="Новинки" data={newGames} />
+      {
+        (popularGames && newGames) ? (
+          <>
+            <CardsList id="popular" title="Популярные" data={popularGames}/>
+            <CardsList id="new" title="Новинки"  data={newGames}/>
+          </>
+        ) : <Preloader />
+      }
       <Promo />
     </main>
   );

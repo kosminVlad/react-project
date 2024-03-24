@@ -5,11 +5,13 @@ import { authorize } from '@/app/api/api-utils';
 import { isResponseOk, getMe } from '@/app/api/api-utils';
 import { endpoints } from '@/app/api/config';
 import { useEffect } from 'react';
-import { setJWT, removeJWT, getJWT } from '@/app/api/api-utils';
+import { useContext } from "react";
+import { AuthContext } from "@/app/context/app-context";
+import { useStore } from '@/app/store/app-store';
 
 export const AuthForm = (props) => {
+  const authContext = useStore();
   const [authData, setAuthData] = useState({ identifier: "", password: "" });
-  const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState({ status: null, text: null });
 
   const handleInput = (e) => {
@@ -17,30 +19,28 @@ export const AuthForm = (props) => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const userData = await authorize(endpoints.auth, authData);
-  if (isResponseOk(userData)) {
-    setUserData(userData);
-    await getMe(endpoints.me, userData.jwt);
-    setJWT(userData.jwt);
-    props.setAuth(true);
-    setMessage({ status: "success", text: "Вы авторизовались!" });
-  } else {
-    setMessage({ status: "error", text: "Неверные почта или пароль" });
-  }
-};
+    e.preventDefault();
+    const userData = await authorize(endpoints.auth, authData);
+    if(isResponseOk(userData)) {
+      authContext.login(userData.user, userData.jwt); // login из контекста
+      setMessage({ status: "success", text: "Вы авторизовались!" });
+    } else {
+      setMessage({ status: "error", text: "Неверные почта или пароль" });
+    }
+  };
 
 useEffect(() => {
   let timer; 
-  if (userData) {
+  if (authContext.user) {
     timer = setTimeout(() => {
       props.close();
     }, 1000);
   }
   return () => clearTimeout(timer);
-}, [userData]);
+}, [authContext.user]);
   
   return (
+
     <form onSubmit={handleSubmit} className={Styles["form"]}>
       <h2 className={Styles["form__title"]}>Авторизация</h2>
       <div className={Styles["form__fields"]}>

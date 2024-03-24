@@ -1,15 +1,14 @@
-'use client'
+'use client';
+import { endpoints } from "@/app/api/config";
+import { useGetDataByCategory } from "../api/api-hooks";
+import { CardsList } from "../components/CardsList/CardsList";
+import { Preloader } from "@/app/components/Preloader/Preloader";
 
-import { CardsList } from "../components/CardsList/CardsList"
-import { getNormalizedGamesDataByCategory } from "../api/api-utils"
-import { endpoints } from "../api/config"
-
-export default async function New() {
-    const NewGames = await getNormalizedGamesDataByCategory(endpoints.games, "new")
-    console.log(NewGames)
+export default function New() {
+    const newGames = useGetDataByCategory(endpoints.games, "new");
     return(
         <main className={"main-inner"}>
-            <CardsList id="new" title="Новинки" data={NewGames}/>
+            {newGames ? <CardsList id="new" title="Новинки" data={newGames} /> : <Preloader />} 
         </main>
     )
 }

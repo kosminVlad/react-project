@@ -85,7 +85,7 @@ export default function GamePage(props) {
             <div className={Styles["about__vote"]}>
               <p className={Styles["about__vote-amount"]}>
                 За игру уже проголосовали:
-                <span className={Styles["about__accent"]}>10</span>
+                <span className={Styles["about__accent"]}>{game.users.length}</span>
               </p>
                 <button
                     disabled={!authContext.isAuth || isVoted}
